@@ -1,56 +1,41 @@
-# OCI Auth Check
+# ConnectionTestOciJavaSdk
 
-## Overview
-**OCI Auth Check** is a minimal Java program to verify that your local Oracle Cloud Infrastructure (OCI) Java SDK setup is working correctly.  
-It authenticates using your `~/.oci/config` credentials, connects to OCI's Identity service, and retrieves your current user information.
+This Maven-based Java project tests connections to Oracle Cloud Infrastructure (OCI) using the OCI Java SDK. I created it to apply my Java learning (from Udemy courses) to cloud integration, focusing on basic API calls like listing OCI resources. It runs on my RHEL 10 dual-boot system and targets OCI’s Always Free tier.
 
-This is useful as a **health check** when:
-- Setting up a new development environment for OCI.
-- Testing credential validity.
-- Ensuring network and SDK connectivity before running larger projects.
+## What I've Done
 
----
+- Configured a Maven project with OCI Java SDK dependencies in `pom.xml`.
+- Wrote Java code in `src/main/java` to establish OCI connections (e.g., authentication setup).
+- Added basic tests in `src/test/java` to verify SDK functionality.
+- Tested locally, ensuring compatibility with OCI Always Free resources.
 
-## Prerequisites
-- Java **17** or newer (Java 21 supported).
-- Apache Maven installed.
-- An existing OCI account and generated API keys.
-- A valid OCI configuration file at `~/.oci/config` with a `[DEFAULT]` profile.
+## Installation and Configuration
 
----
+1. **Prerequisites**:
+    - Install Java JDK: `sudo dnf install java-17-openjdk` (on RHEL 10).
+    - Install Maven: `sudo dnf install maven`.
+    - Set up OCI credentials: Create `~/.oci/config` with your OCI details (from OCI Console). Example:
 
-## Configuration
-The program expects the configuration file in the standard location:
-
----
-
-📁 Projektstruktur
-```
-oci-auth-check/
-├── pom.xml
-├── README.md
-└── src/
-└── main/
-├── java/
-│   └── techthor/
-│       └── oci/
-│           ├── OciAuthUtil.java
-│           └── OciAuthCheck.java
-└── resources/
-└── simplelogger.properties
+```script
+[DEFAULT]
+user=ocid1.user.oc1..<your_user_ocid>
+fingerprint=<your_fingerprint>
+key_file=/path/to/private_key.pem
+tenancy=ocid1.tenancy.oc1..<your_tenancy_ocid>
+region=eu-frankfurt-1
 ```
 
+2. Clone the repo: `git clone https://github.com/tfeydev/ConnectionTestOciJavaSdk.git`
 
-Expected successful output:
+3. Build: `mvn clean install`
 
-    ✅ Connection successful!
-    👤 User Display Name: your.email@example.com
-    🆔 User OCID: ocid1.user.oc1..abcdef...
+**Verification**: Check `target/classes` exists (`ls target/classes`); confirm no errors in Maven output (`BUILD SUCCESS`).
 
+## Testing
 
-## Dependencies
+- Run tests: `mvn test`
+- Verify dependencies: `mvn dependency:tree` (should list OCI Java SDK).
 
-- OCI Java SDK Common (oci-java-sdk-common)
-- OCI Identity SDK (oci-java-sdk-identity)
-- OCI HTTP Client (Jersey) (oci-java-sdk-common-httpclient-jersey)
-- SLF4J Simple logger (slf4j-simple)
+**Verification**: Ensure `mvn test` outputs no failures. If connecting to OCI, check logs for successful API calls (e.g., no authentication errors).
+
+This project complements my OCI deployment work in [code repo](https://github.com/tfeydev/code).
